@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABC마트 - 사은품 행사</title>
+    <!-- Google Fonts: Noto Sans KR -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* 기본 스타일 */
+        :root {
+            --primary-color: #66b2ff; /* 밝은 파란색 */
+            --secondary-color: rgba(230, 242, 255, 0.85); /* 밝은 파란색 배경 (투명도 적용) */
+            --accent-color: #ff99cc; /* 핑크색 강조 */
+            --text-color: #333;
+            --background-color: #fff;
+            --light-grey: #f4f4f4;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-image: url('main.jpg'); /* 배경 이미지 적용 */
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* 헤더 */
+        .header {
+            background-color: rgba(255, 255, 255, 0.95); /* 헤더 배경에 투명도 적용 */
+            padding: 20px 0;
+            border-bottom: 1px solid var(--light-grey);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav a:hover {
+            color: var(--primary-color);
+        }
+
+        /* 메인 히어로 섹션 */
+        .hero {
+            background-color: var(--secondary-color);
+            text-align: center;
+            padding: 80px 20px;
+            margin-top: 1px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: #555;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+
+        /* 공통 섹션 스타일 */
+        .section {
+            padding: 80px 0;
+            background-color: rgba(255, 255, 255, 0.9); /* 섹션 배경에 투명도 적용 */
+            margin-top: 1px;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background-color: var(--primary-color);
+        }
+
+        /* 동적 기능 섹션 */
+        .dynamic-feature {
+            background-color: var(--light-grey);
+            padding: 50px 0;
+            text-align: center;
+            margin-top: 1px;
+        }
+
+        .toggle-button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .toggle-button:hover {
+            background-color: #4da6ff;
+            transform: translateY(-3px);
+        }
+
+        #feature-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+            padding: 0 20px;
+        }
+
+        #feature-details.open {
+            max-height: 500px; /* 충분한 높이로 설정 */
+            padding: 20px;
+        }
+        
+        #feature-details p {
+            max-width: 800px;
+            margin: 20px auto;
+            text-align: left;
+            line-height: 1.8;
+        }
+
+        /* 세일 상품 섹션 */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .product-card {
+            background-color: var(--light-grey);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+
+        .product-image {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .product-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 5px;
+        }
+
+        .product-card .price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+
+        /* 후기 섹션 */
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .review-card {
+            background-color: var(--light-grey);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .review-card p {
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .review-card .author {
+            font-weight: bold;
+            text-align: right;
+        }
+
+        /* CTA 섹션 */
+        .cta-section {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 80px 20px;
+            margin-top: 1px;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 700;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            background-color: #e667a4;
+            transform: translateY(-3px);
+        }
+
+        /* 푸터 */
+        .footer {
+            background-color: #333;
+            color: #eee;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 1px;
+        }
+
+        .footer p {
+            margin-bottom: 10px;
+        }
+
+        .social-icons a {
+            color: #eee;
+            font-size: 1.5rem;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+
+        /* 모바일 반응형 */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .features-grid {
+                flex-direction: column;
+            }
+
+            .cta-section h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 헤더 섹션 -->
+    <header class="header">
+        <div class="container header-content">
+            <a href="#" class="logo">ABC마트</a>
+            <nav class="nav">
+                <ul>
+                    <li><a href="#intro">제품 소개</a></li>
+                    <li><a href="#features">기능 보기</a></li>
+                    <li><a href="#sale">세일 상품</a></li>
+                    <li><a href="#reviews">후기</a></li>
+                    <li><a href="https://example.com/qna" target="_blank">문의하기</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- 제품 소개 섹션 (Hero) -->
+        <section id="intro" class="hero">
+            <div class="container">
+                <h1>🎉 ABC마트 사은품 행사!</h1>
+                <p>지금 구매하시면 1+1 이벤트에 참여하실 수 있습니다. 특별한 기회를 놓치지 마세요!</p>
+            </div>
+        </section>
+
+        <!-- 기능 더보기 섹션 (동적) -->
+        <section id="features" class="section dynamic-feature">
+            <div class="container">
+                <h2 class="section-title">제품 상세 설명</h2>
+                <button id="toggle-btn" class="toggle-button">기능 더보기</button>
+                <div id="feature-details">
+                    <p>
+                        <strong>메인페이지:</strong> 1+1 이벤트와 같은 주요 프로모션을 강조하여 고객의 시선을 사로잡습니다.
+                        직관적인 디자인과 핵심 메시지를 통해 방문자가 쉽게 제품에 대한 흥미를 느낄 수 있도록 구성했습니다.
+                    </p>
+                    <p>
+                        <strong>서브페이지:</strong> 다양한 세일 상품들을 카테고리별로 깔끔하게 정리하여 보여줍니다.
+                        필터링 및 정렬 기능을 통해 고객이 원하는 상품을 빠르게 찾을 수 있도록 돕는 역할을 합니다.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 세일 상품 섹션 -->
+        <section id="sale" class="section">
+            <div class="container">
+                <h2 class="section-title">세일 상품</h2>
+                <div class="product-grid">
+                    <div class="product-card">
+                        <img src="product.png" alt="세일 상품 1" class="product-image">
+                        <h3>ABC 운동화</h3>
+                        <p class="price">₩ 59,000</p>
+                    </div>
+                    <div class="product-card">
+                        <img src="product.png" alt="세일 상품 2" class="product-image">
+                        <h3>데일리 슬립온</h3>
+                        <p class="price">₩ 45,000</p>
+                    </div>
+                    <div class="product-card">
+                        <img src="product.png" alt="세일 상품 3" class="product-image">
+                        <h3>ABC 샌들</h3>
+                        <p class="price">₩ 35,000</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 사용 후기 섹션 -->
+        <section id="reviews" class="section">
+            <div class="container">
+                <h2 class="section-title">사용 후기</h2>
+                <div class="reviews-grid">
+                    <div class="review-card">
+                        <p>"1+1 이벤트로 정말 좋은 신발을 저렴하게 구매했어요! 디자인도 예쁘고 배송도 빨라서 만족합니다."</p>
+                        <div class="author">김*현</div>
+                    </div>
+                    <div class="review-card">
+                        <p>"세일 상품이 많아서 좋았어요. 여러 제품을 비교해보고 원하는 신발을 득템했습니다. 다음에 또 이용할게요!"</p>
+                        <div class="author">이*정</div>
+                    </div>
+                    <div class="review-card">
+                        <p>"문의사항이 있어서 연락드렸는데, 친절하게 응대해주셔서 감사했습니다. 서비스도 제품도 최고예요."</p>
+                        <div class="author">박*민</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA 섹션 -->
+        <section class="cta-section">
+            <div class="container">
+                <h2>지금 바로 문의하고 혜택을 확인하세요!</h2>
+                <a href="https://example.com/qna" target="_blank" class="cta-button">문의하기</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- 푸터 섹션 -->
+    <footer class="footer">
+        <div class="container">
+            <p>ABC마트 | 대표: 홍길동 | 사업자등록번호: 123-45-67890</p>
+            <p>주소: 서울시 강남구 테헤란로 123</p>
+            <p>이메일: contact@abcmart.co.kr</p>
+            <div class="social-icons">
+                <!-- SNS 아이콘 링크 (선택 사항) -->
+                <!-- <a href="#">Facebook</a> -->
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleButton = document.getElementById('toggle-btn');
+            const featureDetails = document.getElementById('feature-details');
+
+            // "기능 더보기" 버튼 클릭 이벤트 리스너
+            toggleButton.addEventListener('click', () => {
+                // 'open' 클래스가 있으면 제거하고, 없으면 추가
+                featureDetails.classList.toggle('open');
+
+                // 버튼 텍스트 변경
+                if (featureDetails.classList.contains('open')) {
+                    toggleButton.textContent = '기능 숨기기';
+                } else {
+                    toggleButton.textContent = '기능 더보기';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
